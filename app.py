@@ -59,6 +59,8 @@ def index():
             if 'message' in webhook_event:
                 handle_message(sender_psid, webhook_event['message'])
 
+    return "OK", 200
+
 def handle_message(sender_psid, message):
     print('message: ', message)
 
@@ -105,8 +107,6 @@ def home():
             print("Webhook subscriptions renewed")
 
     return f"Hello, World! Your Flask App is running on Heroku with HTTPS!"
-
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

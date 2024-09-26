@@ -91,7 +91,7 @@ def register_user_subscribe(user_psid):
 
 def register_user_unsubscribe(user_psid):
     session = db.Session()
-    remove_psid = session.query(db.UserSubscription).filter(user_id=user_psid).first()
+    remove_psid = session.query(db.UserSubscription).filter(user_psid=user_psid).first()
     if remove_psid:
         try:
             session.delete(remove_psid)

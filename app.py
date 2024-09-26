@@ -62,7 +62,7 @@ def handle_message(sender_psid, message):
     print('message: ', message)
 
     if 'text' in message:
-        reponse = {"text": f"You just sent me: {message['text']}"}
+        response = {"text": f"You just sent me: {message['text']}"}
         send_message(sender_psid, response)
     else:
         response = {"text": "This chatbot only accepts text messages"}

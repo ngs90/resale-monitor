@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 import datetime 
 import os 
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+DATABASE_URL = os.getenv('DATABASE_URL').replace('postgre', 'postgresql')
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 

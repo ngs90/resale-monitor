@@ -10,9 +10,9 @@ logger.setLevel(logging.INFO)
 logger.info("Starting Flask App")
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST', 'GET'])
 def index():
-    verify_token = ""
+    verify_token = os.getenv('VERIFY_TOKEN')
 
     if 'hub.mode' in requests.args:
         mode = requests.args.get('hub.mode')

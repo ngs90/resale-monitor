@@ -33,5 +33,4 @@ def main():
                 send_message(subscriber.user_psid, message)
 
 if __name__ == "__main__":
-    print('yolo')
     main()

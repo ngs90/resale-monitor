@@ -4,8 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, DateTime
 import datetime 
 import os 
+from config import DATABASE_URL
 
-DATABASE_URL = os.getenv('DATABASE_URL').replace('postgres', 'postgresql')
 engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 

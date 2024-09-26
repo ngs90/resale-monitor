@@ -22,8 +22,8 @@ class UserSubscription(Base):
 class TicketAvailability(Base):
     __tablename__ = 'ticket_availability'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    availability_datetime = Column(DateTime, default=datetime.datetime.now(datetime.UTC)
-    availability = Column(Boolean, nullable=False)
+    availability_datetime = Column(DateTime, default=datetime.datetime.now(datetime.UTC))
+    availability = Column(Integer, nullable=False)
 
 # create tables if not exists 
 Base.metadata.create_all(engine)

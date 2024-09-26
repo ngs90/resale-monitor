@@ -2,18 +2,21 @@ import requests
 import regex as re 
 from bs4 import BeautifulSoup
 
-response = requests.get("https://secure.onreg.com/onreg2/bibexchange/?eventid=6591&language=us")
 
-soup = BeautifulSoup(response.text, 'html.parser')
+def check_ticket_availability():
 
-text = soup.get_text()
+    uri = "https://secure.onreg.com/onreg2/bibexchange/?eventid=6591&language=us"
+    response = requests.get(uri)
+    soup = BeautifulSoup(response.text, 'html.parser')
 
-if "There are currently no race numbers for sale. Try again later." in text:
-    message = "No race numbers for sale"
-else:
-    message = "Race numbers for sale"
+    text = soup.get_text()
 
-print('message:', message)
+    if "There are currently no race numbers for sale. Try again later." in text:
+        return "No race numbers for sale"
+    else:
+        return f"""There seems to be race numbers for sale.\n\nGo check them out here:\n{uri}"""
+
+    print('message:', message)
 
 # # Send message via Meta Graph API
 # def send_fb_besked(modtager_psid, besked_tekst):

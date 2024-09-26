@@ -4,6 +4,7 @@ import requests
 import json
 import logging 
 import os 
+from listener import ticket_availability
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -61,11 +62,16 @@ def index():
 def handle_message(sender_psid, message):
     print('message: ', message)
 
+    # check ticket availability
+
+    response_text = ticket_availability()
     if 'text' in message:
-        response = {"text": f"You just sent me: {message['text']}"}
+        response_text = f"""You just sent me: {message['text']}. My answer is: \n{response_text}"""
+        response = {"text": response_text}
+        
         send_message(sender_psid, response)
     else:
-        response = {"text": "This chatbot only accepts text messages"}
+        response = {"text": f"Answer: \n{response_text}"}
         send_message(sender_psid, response)
 
 

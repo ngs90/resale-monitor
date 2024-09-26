@@ -88,6 +88,9 @@ def send_message(sender_psid, response):
 
 @app.route('/')
 def home():
+    print('HELLO!')
+    print('request args: ', request.args)
+    print('request data: ', request.data)
     return f"Hello, World! Your Flask App is running on Heroku with HTTPS!"
 
 if __name__ == "__main__":

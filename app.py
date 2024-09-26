@@ -34,7 +34,7 @@ def index():
 
         if mode == 'subscribe' and token == verify_token:
             logging.info("WEBHOOK VERIFIED")
-            challenge = requests.args.get('hub.challenge')
+            challenge = request.args.get('hub.challenge')
             return challenge, 200
         else:
             logging.info("VERIFICATION FAILED")

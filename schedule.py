@@ -19,10 +19,11 @@ def send_message(sender_psid, response):
 
 def main():
     availability = check_ticket_availability(TICKET_CHECK_URL)
+    print('availability:', availability)
     register_ticket_availability(availability)
     
     # Hvis der er billetter tilgængelige, send beskeder til abonnenter
-    if availability >= 0:
+    if availability > 0:
         with Session() as session:
             subscribers = session.query(UserSubscription).all()
             for subscriber in subscribers:

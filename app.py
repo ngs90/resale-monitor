@@ -14,6 +14,8 @@ app = Flask(__name__)
 def index():
     verify_token = os.getenv('VERIFY_TOKEN')
 
+    print('request args: ', request.args)
+
     if 'hub.mode' in request.args:
         mode = request.args.get('hub.mode')
         print(mode)
@@ -29,12 +31,12 @@ def index():
         token = request.args.get('hub.verify_token')
 
         if mode == 'subscribe' and token == verify_token:
-            print("WEBHOOK VERIFIED")
+            logging.info("WEBHOOK VERIFIED")
             challenge = requests.args.get('hub.challenge')
             return challenge, 200
         else:
+            logging.info("VERIFICATION FAILED")
             return "Verification failed", 403
-
 
     data = request.data # byte format 
 

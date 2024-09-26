@@ -19,19 +19,14 @@ def index():
 
     if 'hub.mode' in request.args:
         mode = request.args.get('hub.mode')
-        print(mode)
     if 'hub.verify_token' in request.args:
         token = request.args.get('hub.verify_token')
-        print(token)
     if 'hub.challenge' in request.args:
         challenge = request.args.get('hub.challenge')
-        print(challenge)
 
     if 'hub.mode' in request.args and 'hub.verify_token' in request.args:
         mode = request.args.get('hub.mode')
         token = request.args.get('hub.verify_token')
-
-        print('ok now need to verify that', token,  verify_token, token == verify_token)
 
         if mode == 'subscribe' and token == verify_token:
             logging.info("WEBHOOK VERIFIED")
@@ -42,8 +37,6 @@ def index():
             return "Verification failed", 403
 
     data = request.data # byte format 
-
-    logging.error(f"Received data: {data}")
 
     body = json.loads(data.decode('utf-8'))
 
@@ -59,23 +52,25 @@ def index():
             if 'message' in webhook_event:
                 handle_message(sender_psid, webhook_event['message'])
 
-    return "OK", 200
+    return "OK", 200 # with respond with 200, otherwise fb will keep sending the message.
 
 def handle_message(sender_psid, message):
     print('message: ', message)
 
     # check ticket availability
+    
+    uri = "https://secure.onreg.com/onreg2/bibexchange/?eventid=6591&language=us"
 
-    response_text = ticket_availability()
+    response_text = ticket_availability(uri)
+
     if 'text' in message:
-        response_text = f"""You just sent me: {message['text']}. My answer is: \n{response_text}"""
+        response_text = f"""{response_text}\n\nSource: {uri}"""
         response = {"text": response_text}
         
         send_message(sender_psid, response)
     else:
-        response = {"text": f"Answer: \n{response_text}"}
+        response = {"text": f"{response_text}\n\nSource: {uri}"}
         send_message(sender_psid, response)
-
 
 def send_message(sender_psid, response):
 

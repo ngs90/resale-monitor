@@ -3,9 +3,8 @@ import regex as re
 from bs4 import BeautifulSoup
 
 
-def ticket_availability():
+def ticket_availability(uri):
 
-    uri = "https://secure.onreg.com/onreg2/bibexchange/?eventid=6591&language=us"
     response = requests.get(uri)
     soup = BeautifulSoup(response.text, 'html.parser')
 

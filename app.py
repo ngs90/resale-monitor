@@ -36,7 +36,7 @@ def index():
             return "Verification failed", 403
 
 
-    data = requests.data # byte format 
+    data = request.data # byte format 
     body = json.loads(data.decode('utf-8'))
 
     if 'object' in body and body['object'] == 'page':
@@ -64,7 +64,7 @@ def handle_message(sender_psid, message):
 
 def send_message(sender_psid, response):
 
-    access_token = config.ACCESS_TOKEN
+    access_token = os.getenv('ACCESS_TOKEN')
 
     payload = {
         "recipient": {"id": sender_psid},

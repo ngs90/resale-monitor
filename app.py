@@ -100,7 +100,8 @@ def register_user_unsubscribe(user_psid):
             session.close()
 
 def register_ticket_availability():
-    availability = ticket_availability()
+    uri = "https://secure.onreg.com/onreg2/bibexchange/?eventid=6591&language=us"
+    availability = ticket_availability(uri)
     is_available = db.TicketAvailability(availability=availability)
     session = db.Session()
     try:

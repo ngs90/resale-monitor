@@ -30,6 +30,8 @@ def index():
         mode = request.args.get('hub.mode')
         token = request.args.get('hub.verify_token')
 
+        print('ok now need to verify that', token,  verify_token, token == verify_token)
+
         if mode == 'subscribe' and token == verify_token:
             logging.info("WEBHOOK VERIFIED")
             challenge = requests.args.get('hub.challenge')

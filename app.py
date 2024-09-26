@@ -38,7 +38,7 @@ def index():
 
     data = request.data # byte format 
 
-    logging.info("Received data: %s", data)
+    logging.error(f"Received data: {data}")
 
     body = json.loads(data.decode('utf-8'))
 

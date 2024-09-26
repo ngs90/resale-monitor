@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask
+from flask import Flask, request
 import requests
 import json
 import logging 
@@ -14,19 +14,19 @@ app = Flask(__name__)
 def index():
     verify_token = os.getenv('VERIFY_TOKEN')
 
-    if 'hub.mode' in requests.args:
-        mode = requests.args.get('hub.mode')
+    if 'hub.mode' in request.args:
+        mode = request.args.get('hub.mode')
         print(mode)
-    if 'hub.verify_token' in requests.args:
-        token = requests.args.get('hub.verify_token')
+    if 'hub.verify_token' in request.args:
+        token = request.args.get('hub.verify_token')
         print(token)
-    if 'hub.challenge' in requests.args:
-        challenge = requests.args.get('hub.challenge')
+    if 'hub.challenge' in request.args:
+        challenge = request.args.get('hub.challenge')
         print(challenge)
 
-    if 'hub.mode' in requests.args and 'hub.verify_token' in requests.args:
-        mode = requests.args.get('hub.mode')
-        token = requests.args.get('hub.verify_token')
+    if 'hub.mode' in request.args and 'hub.verify_token' in request.args:
+        mode = request.args.get('hub.mode')
+        token = request.args.get('hub.verify_token')
 
         if mode == 'subscribe' and token == verify_token:
             print("WEBHOOK VERIFIED")
@@ -81,7 +81,7 @@ def send_message(sender_psid, response):
 
 @app.route('/')
 def home():
-    return f"Hello, World! Your Flask App is running on Heroku with HTTPS! The accecss token is: {os.getenv('ACCESS_TOKEN')}"
+    return f"Hello, World! Your Flask App is running on Heroku with HTTPS!"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

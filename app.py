@@ -96,7 +96,7 @@ def home():
     response = r.json()
     if "success" in response:
         if response["success"] == True:
-        print("Webhook subscriptions renewed")
+            print("Webhook subscriptions renewed")
 
     return f"Hello, World! Your Flask App is running on Heroku with HTTPS!"
 

@@ -91,7 +91,16 @@ def home():
     print('HELLO!')
     print('request args: ', request.args)
     print('request data: ', request.data)
+
+    r = requests.post(f"https://graph.facebook.com/me/subscribed_apps?access_token={os.getenv('ACCESS_TOKEN')}", json={"subscribed_fields": ["messages", "messaging_postbacks", "messaging_referrals"]})
+    response = r.json()
+    if "success" in response:
+        if response["success"] == True:
+        print("Webhook subscriptions renewed")
+
     return f"Hello, World! Your Flask App is running on Heroku with HTTPS!"
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

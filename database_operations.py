@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Session
-from database import UserSubscription, TicketAvailability
+from database import UserSubscription, TicketAvailability, Session
+
 
 def register_user_subscribe(user_psid):
     with Session() as session:

@@ -1,13 +1,16 @@
 # app.py
-from flask import Flask, request
+from flask import Flask, request, render_template
 import requests
 import json
 import logging 
-import os 
 from listener import check_ticket_availability
 from database_operations import register_ticket_availability, register_user_subscribe, register_user_unsubscribe
-
+from database import session, TicketAvailability
 from config import VERIFY_TOKEN, ACCESS_TOKEN, TICKET_CHECK_URL
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+import plotly.utils
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -85,15 +88,42 @@ def send_message(sender_psid, response):
     response = requests.post(url, json=payload, headers=headers)
     print(response.text)
 
+
 @app.route('/')
 def home():
+
     r = requests.post(f"https://graph.facebook.com/me/subscribed_apps?access_token={ACCESS_TOKEN}", json={"subscribed_fields": ["messages", "messaging_postbacks", "messaging_referrals"]})
     response = r.json()
     if "success" in response:
         if response["success"] == True:
             print("Webhook subscriptions renewed")
 
-    return f"Welcome to the CPH Marathon 2025 ticket availability service. To sign up for the service write to the app via the facebook page: https://www.facebook.com/profile.php?id=61566582682564"
+
+    # Hent de sidste 200 indgange fra ticket_availability-tabellen
+    availability_data = session.query(TicketAvailability).order_by(TicketAvailability.availability_datetime.desc()).limit(200).all()
+    
+    # Forbered data til plotning
+    dates = [entry.availability_datetime for entry in availability_data]
+    availabilities = [entry.availability for entry in availability_data]
+
+    # Opret plottet
+    fig = make_subplots(rows=1, cols=1)
+    fig.add_trace(
+        go.Scatter(x=dates, y=availabilities, mode='lines+markers', name='Billet tilgængelighed')
+    )
+
+    fig.update_layout(
+        title='Billet tilgængelighed over tid',
+        xaxis_title='Dato og tid',
+        yaxis_title='Tilgængelighed (0 eller 1)',
+        height=600,
+        margin=dict(l=50, r=50, t=50, b=50),
+    )
+
+    # Konverter plottet til JSON for at bruge det i HTML
+    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template('home.html', plot_json=plot_json)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)

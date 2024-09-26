@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billet Tilgængelighed</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Velkommen til Billet Tilgængeligheds Tracker</h1>
+        <p>
+            Denne side viser tilgængeligheden af billetter over tid. 
+            Grafen nedenfor illustrerer de seneste 200 registreringer af billet tilgængelighed.
+        </p>
+        <div id="plot"></div>
+    </div>
+
+    <script>
+        var plotData = {{ plot_json | safe }};
+        Plotly.newPlot('plot', plotData.data, plotData.layout);
+    </script>
+</body>
+</html>

@@ -110,10 +110,10 @@ Applikationen vil nu være tilgængelig på `http://localhost:5000`.
 
 5. Abonner din side på app-events.
 
-6. Opdater din `.env` fil og Heroku config vars med den genererede Access Token.
+6. Opdater din `.env` fil og Heroku config vars med den genererede access og verify-token.
 
 Husk at holde dine tokens og andre følsomme oplysninger hemmelige og aldrig dele dem offentligt eller inkludere dem i dit versionsstyrede kode.
 
-Dette README-dokument giver en grundlæggende oversigt over, hvordan man sætter projektet op lokalt, med Docker, på Heroku, og hvordan man konfigurerer Facebook Messenger API. Du kan tilpasse det yderligere efter behov, f.eks. ved at tilføje mere specifikke instruktioner eller information om dit projekt.
+Dette README-dokument giver en grundlæggende oversigt over, hvordan man sætter projektet op lokalt, med Docker, på Heroku, og hvordan man konfigurerer Facebook Messenger API. Bemærk, denne readme er autogenereret med clause-3.5-sonnet og er ikke gennemtestet om den virker.
 
-Bemærk, denne readme er autogenereret med clause-3.5-sonnet men er justeret og testet igennem at den virker.
+TODO: Tilføj addons postgresql database + scheduling på heroku.

@@ -1,6 +1,5 @@
 from database import UserSubscription, TicketAvailability, Session
 
-
 def register_user_subscribe(user_psid):
     with Session() as session:
         add_psid = UserSubscription(user_psid=user_psid)

@@ -11,9 +11,9 @@ def ticket_availability(uri):
     text = soup.get_text()
 
     if "There are currently no race numbers for sale. Try again later." in text:
-        return "No race numbers for sale"
+        return 0 # "No race numbers for sale"
     else:
-        return f"""There seems to be race numbers for sale.\n\nGo check them out here:\n{uri}"""
+        return 1 # f"""There seems to be race numbers for sale.\n\nGo check them out here:\n{uri}"""
 
     print('message:', message)
 

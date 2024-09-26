@@ -5,6 +5,7 @@ import json
 import logging 
 import os 
 from listener import ticket_availability
+import database as db
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -16,13 +17,6 @@ def index():
     verify_token = os.getenv('VERIFY_TOKEN')
 
     print('request args: ', request.args)
-
-    if 'hub.mode' in request.args:
-        mode = request.args.get('hub.mode')
-    if 'hub.verify_token' in request.args:
-        token = request.args.get('hub.verify_token')
-    if 'hub.challenge' in request.args:
-        challenge = request.args.get('hub.challenge')
 
     if 'hub.mode' in request.args and 'hub.verify_token' in request.args:
         mode = request.args.get('hub.mode')
@@ -63,14 +57,57 @@ def handle_message(sender_psid, message):
 
     response_text = ticket_availability(uri)
 
-    if 'text' in message:
-        response_text = f"""{response_text}\n\nSource: {uri}"""
+    if 'text' in message and message['text'].lower() == 'subscribe':
+        register_user_subscribe(sender_psid)
+        response_text = f"""You have succesfully subscribed to the CPH marathon '25 ticket availability monitoring service."""
         response = {"text": response_text}
-        
+        send_message(sender_psid, response)
+    elif 'text' in message and message['text'].lower() == 'unsubscribe':
+        register_user_unsubscribe(sender_psid)
+        reponse_text = f"""You have succefully unsubscribed to the CPH marathon '25 ticket availability monitoring service."""
+        response = {"text": reponse_text}
         send_message(sender_psid, response)
     else:
-        response = {"text": f"{response_text}\n\nSource: {uri}"}
+        response = {"text": f"""Welcome to the CPH marathon '25 ticket availability monitoring service. 
+                    This is a service that will write you a message on messenger if there is one or more tickets available on the resale platform. \n\n 
+                    Your options: \n
+                    To subscribe answer "SUBCRIBE" \n
+                    To unsubscribe answer "UNSUBSCRIBE".
+
+                    The current status on ticket availability: {response_text} \n\n 
+                    Source: {uri}
+                            """}
+        register_ticket_availability()
         send_message(sender_psid, response)
+
+def register_user_subscribe(user_psid):
+    session = db.Session()
+    add_psid = db.UserSubscription(user_psid=user_psid)
+    try:
+        session.add(add_psid)
+        session.commit()
+    finally:
+        session.close()
+
+def register_user_unsubscribe(user_psid):
+    session = db.Session()
+    remove_psid = session.query(db.UserSubscription).filter(user_id=user_psid).first()
+    if remove_psid:
+        try:
+            session.delete(remove_psid)
+            session.commit()
+        finally:
+            session.close()
+
+def register_ticket_availability():
+    availability = ticket_availability()
+    is_available = db.TicketAvailability(availability=availability)
+    session = db.Session()
+    try:
+        session.add(is_available)
+        session.commit()
+    finally:
+        session.close()
 
 def send_message(sender_psid, response):
 
